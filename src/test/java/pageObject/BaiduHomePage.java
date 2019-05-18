@@ -1,28 +1,33 @@
 package pageObject;
-
-/**
- * Created by wangdx on 2017/11/22.
- */
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+
 public class BaiduHomePage {
 
-    //文本框
-    @FindBy(name="wd")
-    WebElement inputText;
-    //搜索按钮
-    @FindBy(id = "su")
-    WebElement searchButton;
+    WebDriver driver;
 
-    //操作方法 搜索
-    public void search(String keyword){
-        inputText.sendKeys(keyword);
-        searchButton.click();
+    //文本框
+    By inputText = By.name("wd");
+    //搜索按钮
+    By searchButton = By.id("su");
+
+    public BaiduHomePage(WebDriver driver){
+        this.driver = driver;
+    }
+
+    //输入关键字
+    public void setKeyWords(String keyWords){
+
+        driver.findElement(inputText).sendKeys(keyWords);
+
+    }
+
+    //点击搜索按钮
+    public void clickSearchButton(){
+
+        driver.findElement(searchButton).click();
+
     }
 
 }

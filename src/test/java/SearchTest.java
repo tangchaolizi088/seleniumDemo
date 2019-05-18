@@ -5,8 +5,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -19,8 +21,8 @@ public class SearchTest {
 
     @BeforeClass
     public void setUp() throws Exception{
-        System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir")+"\\driver\\chromedriver.exe");
-        driver = new ChromeDriver();
+        System.setProperty("webdriver.ie.driver",System.getProperty("user.dir")+"\\driver\\IEDriverServer.exe");
+        driver = new InternetExplorerDriver();
         driver.manage().window().maximize();
         driver.get(url);
         Thread.sleep(3000);
@@ -28,23 +30,22 @@ public class SearchTest {
 
     @Test
     public void testSearch() throws Exception{
-
-        WebElement element = driver.findElement(By.name("wd"));
-        element.sendKeys("测试");
-        element.submit();
+        //定位百度文本框 并输入搜索关键字
+        driver.findElement(By.name("wd")).sendKeys("测试");
+        //定位百度一下按钮，并点击
+        driver.findElement(By.id("su")).click();
+        //等待3秒
+        Thread.sleep(3000);
+        //获取页面标题
+        String titile = driver.getTitle();
+        //输出页面标题
         System.out.print("Page title is: " + driver.getTitle());
-        (new WebDriverWait(driver, 10)).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                return d.getTitle().toLowerCase().startsWith("测试");
-            }
-        });
-        System.out.println("Page title is: " + driver.getTitle());
-
+        //验证页面标题中是否包含测试关键字
+        Assert.assertTrue(titile.contains("测试"));
     }
 
     @AfterClass
     public void tearDown(){
-
         driver.quit();
     }
 
