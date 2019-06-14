@@ -2,8 +2,10 @@ package testSuites;
 
 import PageFactory.BaiduHomePage;
 import PageFactory.SearchResultPage;
+import common.LogListener;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -25,7 +27,7 @@ public class PageFactoryDemo {
 	@BeforeClass
 	public void setUp() throws Exception{
 		System.setProperty("webdriver.ie.driver",System.getProperty("user.dir")+"\\driver\\IEDriverServer.exe");
-		driver = new InternetExplorerDriver();
+		driver = new EventFiringWebDriver(new InternetExplorerDriver()).register(new LogListener());
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		driver.get("http://www.baidu.com");
 	}
