@@ -9,6 +9,7 @@ import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 
@@ -24,13 +25,20 @@ public class PageFactoryDemo {
 
 	SearchResultPage resultPage;
 
+	@Parameters("browser")
 	@BeforeClass
-	public void setUp() throws Exception{
-		System.setProperty("webdriver.ie.driver",System.getProperty("user.dir")+"\\driver\\IEDriverServer.exe");
-		driver = new EventFiringWebDriver(new InternetExplorerDriver()).register(new LogListener());
+	public void setUp(String browser) throws Exception {
+		if (browser.equalsIgnoreCase("chrome")) {
+			System.setProperty("webdriver.ie.driver", System.getProperty("user.dir") + "\\driver\\chromedriver.exe");
+			driver = new EventFiringWebDriver(new InternetExplorerDriver()).register(new LogListener());
+		} else if (browser.equalsIgnoreCase("ie")) {
+			System.setProperty("webdriver.ie.driver", System.getProperty("user.dir") + "\\driver\\IEDriverServer.exe");
+			driver = new EventFiringWebDriver(new InternetExplorerDriver()).register(new LogListener());
+		}
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		driver.get("http://www.baidu.com");
 	}
+
 	@Test
 	public void testSearch() throws InterruptedException {
 		//创建首页对象
@@ -50,7 +58,7 @@ public class PageFactoryDemo {
 	}
 
 	@AfterClass
-	public void tearDown(){
+	public void tearDown() {
 
 		driver.quit();
 	}

@@ -4,11 +4,13 @@
 import common.LogListener;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 public class SearchTest {
@@ -19,14 +21,22 @@ public class SearchTest {
 
     private String url = "http://www.baidu.com";
 
+    @Parameters("browser")
     @BeforeClass
-    public void setUp() throws Exception{
-        System.setProperty("webdriver.ie.driver",System.getProperty("user.dir")+"\\driver\\IEDriverServer.exe");
-        WebDriver driver = new InternetExplorerDriver();
-        eventDriver = new EventFiringWebDriver(driver);
+    public void setUp(String browser) throws Exception{
+        if(browser.equalsIgnoreCase("chrome")){
+            System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir")+"\\driver\\chromedriver.exe");
+            WebDriver driver = new ChromeDriver();
+            eventDriver = new EventFiringWebDriver(driver);
+        }else if(browser.equalsIgnoreCase("ie")){
+            System.setProperty("webdriver.ie.driver",System.getProperty("user.dir")+"\\driver\\IEDriverServer.exe");
+            WebDriver driver = new InternetExplorerDriver();
+            eventDriver = new EventFiringWebDriver(driver);
+        }
+
         LogListener logListener = new LogListener();
         eventDriver.register(logListener);
-        eventDriver.manage().window().maximize();
+//        eventDriver.manage().window().maximize();
         eventDriver.get(url);
         Thread.sleep(3000);
     }
